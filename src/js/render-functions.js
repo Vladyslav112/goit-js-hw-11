@@ -1,53 +1,49 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-let lightbox = null;
-
 export function renderImages(images) {
   const gallery = document.getElementById('gallery');
-  gallery.innerHTML = images.map(image => createImageCard(image)).join('');
-  if (lightbox) {
-    lightbox.refresh();
-  } else {
-    lightbox = new SimpleLightbox('.gallery a');
-  }
+  const markup = images.map(createImageCard).join('');
+  gallery.innerHTML = markup;
+  refreshLightbox();
 }
 
-function createImageCard({
-  webformatURL,
-  largeImageURL,
-  tags,
-  likes,
-  views,
-  comments,
-  downloads,
-}) {
+function createImageCard(image) {
   return `
     <div class="photo-card">
-      <a href="${largeImageURL}">
-        <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+      <a href="${image.largeImageURL}">
+        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
       </a>
       <div class="info">
-        <p><b>Likes:</b> ${likes}</p>
-        <p><b>Views:</b> ${views}</p>
-        <p><b>Comments:</b> ${comments}</p>
-        <p><b>Downloads:</b> ${downloads}</p>
+        <p><b>Likes</b> ${image.likes}</p>
+        <p><b>Views</b> ${image.views}</p>
+        <p><b>Comments</b> ${image.comments}</p>
+        <p><b>Downloads</b> ${image.downloads}</p>
       </div>
     </div>
   `;
 }
 
+export function showError(message) {
+  iziToast.error({ title: 'Error', message });
+}
+
 export function showLoader() {
-  document.getElementById('loader').style.display = 'block';
+  const loader = document.createElement('div');
+  loader.className = 'loader';
+  document.body.appendChild(loader);
 }
 
 export function hideLoader() {
-  document.getElementById('loader').style.display = 'none';
+  const loader = document.querySelector('.loader');
+  if (loader) {
+    loader.remove();
+  }
 }
 
-export function showError(message) {
-  iziToast.error({ title: 'Error', message });
+function refreshLightbox() {
+  const lightbox = new SimpleLightbox('.photo-card a');
+  lightbox.refresh();
 }
