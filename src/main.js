@@ -18,12 +18,12 @@ form.addEventListener('submit', event => {
     return;
   }
 
-  gallery.innerHTML = ''; // Clear the gallery before new search
-  showLoader(); // Show loader before fetching
+  gallery.innerHTML = '';
+  showLoader();
 
   fetchImages(query)
     .then(images => {
-      hideLoader(); // Hide loader after fetching
+      hideLoader();
       if (images.length === 0) {
         showError(
           'Sorry, there are no images matching your search query. Please try again!'
@@ -33,7 +33,7 @@ form.addEventListener('submit', event => {
       }
     })
     .catch(error => {
-      hideLoader(); // Hide loader if an error occurs
+      hideLoader();
       showError('An error occurred while fetching images');
     });
 });
